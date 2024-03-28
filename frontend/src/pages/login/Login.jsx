@@ -1,11 +1,21 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import useLogin from "../../hooks/useLogin";
+
 const Login = () => {
+  const [userDetails, setUserDetails] = useState({ user: "", password: "" });
+  const {loading, Login} = useLogin();
+  const handleSubmit =  async(e) => {
+    e.preventDefault();
+    await Login(userDetails);
+  };
   return (
     <div className=" w-[370px]  min-h-[350px] mx-auto flex flex-col items-center justify-center">
       <div className="w-full  p-8 h-[350px] rounded-md   ">
         <h1 className="text-3xl font-semibold text-center  mb-8 font-mono mt-5">
           Login <span className="text-blue-500">ChatKar</span>
         </h1>
-        <form action="">
+        <form action="" onSubmit={handleSubmit} >
           <div className="mb-4">
             <label className="input input-bordered flex items-center gap-2 font-mono">
               <svg
@@ -16,7 +26,18 @@ const Login = () => {
               >
                 <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
               </svg>
-              <input type="text" className="grow" placeholder="Username or Email" />
+              <input
+                type="text"
+                className="grow"
+                placeholder="Username or Email"
+                onChange={(e) => {
+                  setUserDetails((prevState) => ({
+                    ...prevState,
+                    user: e.target.value,
+                  }));
+                }}
+                value={userDetails.user}
+              />
             </label>
           </div>
           <div className=" mb-4">
@@ -33,11 +54,29 @@ const Login = () => {
                   clipRule="evenodd"
                 />
               </svg>
-              <input type="password" placeholder="Password" className="grow" />
+              <input
+                type="password"
+                placeholder="Password"
+                className="grow"
+                onChange={(e) => {
+                  setUserDetails((prevState) => ({
+                    ...prevState,
+                    password: e.target.value,
+                  }));
+                }}
+                value={userDetails.password}
+              />
             </label>
           </div>
-          <button className="btn btn-outline btn-info btn-block text-lg mt-2 font-mono">Login</button>
-          <a href="#" className="text-sm hover:underline hover:text-blue-600 inline-block mt-2 ">{"Don't"} have an account?</a>
+          <button className="btn btn-outline btn-info btn-block text-lg mt-2 font-mono" disabled={loading}>
+            {loading ? (<span className="loading loading-spinner"></span>):"Login"}
+          </button>
+          <Link
+            to="/signup"
+            className="text-sm hover:underline hover:text-blue-600 inline-block mt-2 "
+          >
+            {"Don't"} have an account?
+          </Link>
         </form>
       </div>
     </div>
@@ -45,3 +84,4 @@ const Login = () => {
 };
 
 export default Login;
+
