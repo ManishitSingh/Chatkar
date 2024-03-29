@@ -49,6 +49,7 @@ const loginSchema = z.object({
 
 //Controllers
 export const signup = async (req, res) => {
+ 
   try {
     const result = userDetails.safeParse(req.body);
     if (!result.success) {

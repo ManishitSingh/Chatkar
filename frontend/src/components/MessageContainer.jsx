@@ -1,23 +1,34 @@
+import { useEffect } from "react";
+import useConversation from "../zustand/useConversation";
 import MessageInput from "./MessageInput";
 import Messages from "./Messages";
 import {TiMessages} from 'react-icons/ti'; 
 
 const MessageContainer = () => {
-    const chatSelected = true;
+    // const chatSelected = true;
+    const {selectedConversation,setSelectedConversation} = useConversation();
+
+    useEffect(()=>{
+      //cleanup function (unmounts)
+      return () =>{
+        setSelectedConversation(null);
+      }
+    },[setSelectedConversation]);
+
   return (<>
-    {chatSelected?(<div className="md:min-w-[450px] flex flex-col h-full ">
+    {selectedConversation?(<div className="md:min-w-[450px] flex flex-col h-full ">
       <div className=" h-14 bg-base-300 opacity-1 rounded-tr-md text-gray-100 font-medium  p-2 px-4 flex flex-col justify-center">
         <div className="flex  gap-2 items-center ">
           <div className="avatar ">
             <div className="w-8 rounded-full">
               <img
-                src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+                src={selectedConversation.profilePicture ||"https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"}
                 alt="user avatar"
               />
             </div>
           </div>
 
-          <div className=" ">John Doe</div>
+          <div className=" ">{selectedConversation.fullName}</div>
         </div>
       </div>
       {/*  */}

@@ -28,6 +28,7 @@ export const getMessages = async(req,res)=>{
 
 //function to send message from user to another and create a conversation between them if it doesnt,exist
 export const sendMessage = async (req, res) => {
+  
   try {
     const { id: receiverId } = req.params;//receiverId from the route
     const { message } = req.body;

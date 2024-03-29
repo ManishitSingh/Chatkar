@@ -40,7 +40,7 @@ const useLogin = () => {
             }
         );
         if (response.status === 200) {
-            console.log("response", response.data);
+            // console.log("response", response.data);
             toast.success("Login successfull");
             localStorage.setItem("authUser", JSON.stringify(response.data.User));
             setAuthUser(response.data.User);
