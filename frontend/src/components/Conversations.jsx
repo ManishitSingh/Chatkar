@@ -2,9 +2,11 @@ import useGetUserConversations from "../hooks/useGetUserConversation";
 import PropTypes from "prop-types";
 import { getRandomEmoji } from "../utils/emoji";
 import useConversation from "../zustand/useConversation.js";
+import { useSocketContext } from "../context/SocketContext.jsx";
 
 const Conversations = () => {
   const { loading, conversations } = useGetUserConversations();
+  
   // console.log("conversations",conversations);
  
   return (
@@ -25,13 +27,16 @@ const Conversation = ({ conversation,emoji,lastIndex }) => {
   // Component code here
   const {selectedConversation, setSelectedConversation} = useConversation();
   const isSelected = selectedConversation?._id === conversation._id;
+  const {onlineusers} = useSocketContext();
+  // console.log(onlineusers)
+  const isOnline = onlineusers.includes(conversation._id);
 
   return (
     <div className="">
       <div className={`flex items-center hover:bg-sky-500 rounded p-2 py-1 cursor-pointer gap-2 ${isSelected ? "bg-sky-500":""}`} onClick={()=>{
         setSelectedConversation(conversation);
       }}>
-        <div className="avatar online">
+        <div className={`avatar ${isOnline ? "online":null}`}>
           <div className="w-12 rounded-full">
             <img
               src={

@@ -4,9 +4,12 @@ import { useAuthContext } from "../context/AuthContext"
 import PropTypes from 'prop-types';
 import useConversation from "../zustand/useConversation";
 import { useEffect, useRef } from "react";
+import useListenMessages from "../hooks/useListenMessages.js";
+import { extractTime } from "../utils/extractTime.js";
 const Messages = () => {
   const{messages,loading} = useGetMessages();
   console.log("messages",messages);
+  useListenMessages();
   const lastref = useRef();
 
   useEffect(()=>{
@@ -40,7 +43,8 @@ const Message = ({message}) => {
   const classy = fromMe ? "chat chat-end" : "chat chat-start";
   const bubbleColor = fromMe ? "bg-blue-500" : "bg-base-300";
   const profilePicture = fromMe ? authUser.profilePicture : selectedConversation.profilePicture;
-
+  const formattedTime = extractTime(message.createdAt);
+  const shouldShake = message.shouldShake ? "shake" : "";
   return (
     <div className={`${classy}`}>
       <div className="chat-image avatar">
@@ -51,11 +55,11 @@ const Message = ({message}) => {
           />
         </div>
       </div>
-      <div className={`chat-bubble text-white ${bubbleColor}`}>
+      <div className={`chat-bubble text-white ${shouldShake} ${bubbleColor}`}>
         {message.message}
       </div>
       <div className="chat-footer opacity-50 text-xs flex gap-1 items-center">
-        {new Date(message.createdAt).toLocaleString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
+       {formattedTime}
       </div>
     </div>
   );

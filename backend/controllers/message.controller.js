@@ -1,5 +1,6 @@
 import Conversation from "../models/conversation.model.js";
 import Message from "../models/message.model.js";
+import { getRecieverSocketId, io } from "../socket/socket.js";
 
 
 export const getMessages = async(req,res)=>{
@@ -53,11 +54,20 @@ export const sendMessage = async (req, res) => {
       conversation.messages.push(newMessage._id);
     }
 
+    const recieverId = getRecieverSocketId(receiverId);
+    console.log(recieverId);
+    if(recieverId){
+      //io.to(socketid).emit is used to send events to specific client
+      // console.log("n")
+      io.to(recieverId).emit("newMessage",newMessage);
+    }
     //Socket.io here
 
     //this will run in parallel
     await Promise.all([conversation.save(), newMessage.save()]);
     res.status(201).json({ newMessage, success: true });
+
+
   } catch (error) {
     console.log("Send Message Route", error);
     return res

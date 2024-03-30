@@ -25,12 +25,14 @@ const useLogin = () => {
         credentials: { username: user, password },
       });
       if (!result.success) {
+        console.log("in",result.error.errors);
         result.error.errors.map((error) => {
-          return toast.error(`${error.path[0]}:${error.message}`);
+          // console.log("error",error);
+          return toast.error(`${error.path[1]}:${error.message}`);
         });
       }}
     //   console.log("out",result.data);
-        const response = await axios.post(
+        if(result.success){const response = await axios.post(
             "/api/auth/login",
             result.data,
             {
@@ -39,6 +41,7 @@ const useLogin = () => {
             },
             }
         );
+        console.log("response", response);
         if (response.status === 200) {
             // console.log("response", response.data);
             toast.success("Login successfull");
@@ -48,18 +51,19 @@ const useLogin = () => {
         if (response.status !== 200) {
             console.log("response", response.data);
             throw new Error(response.error);
-        }
+        }}
 
 
     //   console.log(result.data);
     } catch (error) {
       console.log("Login Route", error);
-      toast.error(
-        error.response.data.Error ||
-          error.response.data.error ||
-          error.response.data.message ||
-          error.response.data
-      );
+      return toast.error(error.response.data.Error);
+      // toast.error(
+      //   error.response.data.Error ||
+      //     error.response.data.error ||
+      //     error.response.data.message ||
+      //     error.response.data
+      // );
     } finally {
       setLoading(false);
     }

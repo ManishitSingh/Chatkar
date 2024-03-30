@@ -5,7 +5,9 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "server": "nodemon backend/server.js"
+    "server": "node backend/server.js",
+    "start": "node backend/server.js",
+    "build":"npm install && cd frontend && npm install && npm run build && cd .."
   },
   "author": "",
   "license": "ISC",
